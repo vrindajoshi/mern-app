@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import Product from './models/product.model.js';
+import { mongo } from 'mongoose';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.delete("/api/products/:id", async (req, res) => { // creates the /products/:
     }
 });
 
+// endpoint to get all products (GET request to /api/products)
 app.get("/api/products", async (req, res) => {
     try {
         const products = await Product.find({});
@@ -48,6 +50,24 @@ app.get("/api/products", async (req, res) => {
     } catch (error) {
         console.error("Error in Fetching Products", error.message);
         res.status(500).json( {success: false, message: "Server Error"} );
+    }
+});
+
+// endpoint to update a product by id (PUT request to /api/products/:id)
+app.put("/api/products/:id", async (req, res) => { // creates the /products/:id endpoint
+    const {id} = req.params;
+
+    const productUpdates = req.body; // gets the updated product data from the request body
+
+    if (!mongo.Types.ObjectId.isValid(id)) {
+        return  res.status(404).json( {success: false, message: "Invalid product ID"} ); // returns error if id is invalid
+    }
+
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(id, productUpdates, { new: true }); // updates the product with the given id
+        res.status(200).json( {success: true, data: updatedProduct} ); // returns the updated product
+    } catch (error) {
+        res.status(500).json( {success: false, message: "Product not found"} ); // returns error if product not found   
     }
 });
 
