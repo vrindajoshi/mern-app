@@ -29,6 +29,18 @@ app.post("/api/products", async (req, res) => { // creates the /products endpoin
     }
 });
 
+// endpoint to delete a product by id (DELETE request to /api/products/:id)
+app.delete("/api/products/:id", async (req, res) => { // creates the /products/:id endpoint
+    const {id} = req.params;
+
+    try {
+        await Product.findByIdAndDelete(id); // deletes the product with the given id
+        res.status(200).json( {success: true, message: "Product deleted successfully"} ); // returns success message
+    } catch (error) {
+        res.status(404).json( {success: false, message: "Product not found"} ); // returns error if product not found   
+    }
+});
+
 // postman desktop app can be used to test the endpoint
 
 app.listen(5000, () => {
