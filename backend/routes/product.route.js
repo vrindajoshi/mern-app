@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, deleteProduct, getProducts, updateProduct } from '../constrollers/product.controller.js';
+import { createProduct, deleteProduct, getProducts, updateProduct } from '../controller/product.controller.js';
 
 const router = express.Router();
 
@@ -8,7 +8,6 @@ router.post("/", createProduct); // creates the /products endpoint
 
 // endpoint to delete a product by id (DELETE request to /api/products/:id)
 router.delete("/:id", deleteProduct); // creates the /products/:id endpoint
-
 
 // endpoint to get all products (GET request to /api/products)
 router.get("/", getProducts);
