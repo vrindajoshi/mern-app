@@ -36,19 +36,18 @@ const HomePage = () => {
                     spacing={10}
                     w={"full"}
                 >
-                    {products.map((product) => {
+                    {products.map((product) => (
                         <ProductCard key={product.id} product={product}/>
-                    })}
+                    ))}
                 </SimpleGrid>
                 
-                <Text fontSize='xl' textAlign={"center"} fontWeight="bold" color="gray.500">
-                    No Products Found {" "}
-                    <Link to={"/create"}>
-                        <Text color="blue.500" _hover={{ textDecoration: "underline" }}>
-                            Create a Product
-                        </Text>
-                    </Link>
-                </Text>
+                <Text fontSize="xl" textAlign="center" fontWeight="bold" color="gray.500">
+  No Products Found{" "}
+  <Link to="/create" style={{ color: "#3182CE" }}>
+    Create a Product
+  </Link>
+</Text>
+
                 <SimpleGrid>
 
                 </SimpleGrid>
