@@ -13,14 +13,12 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 
-// API Routes (must come BEFORE frontend catch-all)
 app.use("/api/products", productRoutes);
 
-// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-  app.get("/:catchAll(*)", (req, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/frontend/build/index.html"));
   });
 } else {
@@ -29,7 +27,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Ensure DB connects BEFORE listening
 connectDB();
 
 app.listen(PORT, () => {
