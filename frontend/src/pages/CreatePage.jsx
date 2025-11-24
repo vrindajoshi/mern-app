@@ -25,7 +25,7 @@ const CreatePage = () => {
             status: "success",
             isClosable: true
         })
-        setNewProduct({ name: "", price: "", description: "", image: "" }); // reset form
+        setNewProduct({ name: "", price: "", image: "" }); // reset form
     } else {
         toast({
             title: "Error",
