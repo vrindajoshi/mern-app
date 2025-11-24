@@ -35,7 +35,7 @@ export const useProductStore = create((set) => ({
 
     if (!data.success) return { success: false, message: data.message };
 
-    // Remove product from state
+    // remove product from state, update immediately without needed a re render
     set((state) => ({
       products: state.products.filter((product) => product._id !== pid),
     }));
@@ -44,5 +44,29 @@ export const useProductStore = create((set) => ({
   } catch (error) {
     return { success: false, message: error.message || "Something went wrong." };
   }
-}
+},
+
+updateProduct: async (pid, updatedProduct) => {
+    try {
+      const res = await fetch(`/api/products/${pid}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      const data = await res.json();
+      if (!data.success) return { success: false, message: data.message };
+
+      // update the UI without re-render
+      set((state) => ({
+        products: state.products.map((product) =>
+          product._id === pid ? data.data : product
+        ),
+      }));
+
+      return { success: true, message: data.message || "Product updated successfully." };
+    } catch (error) {
+      return { success: false, message: error.message || "Something went wrong." };
+    }
+  },
 }));
