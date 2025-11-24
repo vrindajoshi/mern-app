@@ -1,11 +1,37 @@
-import { useColorModeValue, Box, Image, Heading, Text, IconButton, HStack} from "@chakra-ui/react";
+import { useColorModeValue, Box, Image, Heading, Text, IconButton, HStack, useToast} from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useProductStore } from "../store/product";
+
 
 const ProductCard = ({product}) => {
 
+    const toast = useToast();
+
     const textColor = useColorModeValue("gray.600", "gray.200");
     const bg = useColorModeValue("white", "gray.800");
+
+    const {deleteProduct} = useProductStore();
+
+    const handleDeleteProduct = async (pid) => {
+        const {success, message} = await deleteProduct(pid);
+        
+        if (success) {
+        toast({
+            title: "Success",
+            description: message,
+            status: "success",
+            isClosable: true
+        })
+        } else {
+            toast({
+                title: "Error",
+                description: message,
+                status: "error",
+                isClosable: true
+            })
+        }
+    }
 
     return (
         <Box
@@ -29,7 +55,7 @@ const ProductCard = ({product}) => {
 
             <HStack spacing={2}>
                 <IconButton icon={<FaEdit/>} colorScheme="blue"/>
-                <IconButton icon={<MdDelete/>} colorScheme="red"/>
+                <IconButton onClick={() => handleDeleteProduct(product._id)} icon={<MdDelete/>} colorScheme="red"/>
             </HStack>
             </Box>
         </Box>
